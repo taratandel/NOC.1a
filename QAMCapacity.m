@@ -66,7 +66,7 @@ h = @(x) sqrt(R^2-x.^2);
 g = @(x) -sqrt(R^2-x.^2);
 % variance is 1/2 
 % entropy of the noise 
-c = -log2(pi*exp(1)) - quad2d(integral(snr, x, p), -20, 20, -20, 20) ;
+c = -log2(pi*exp(1)) - quad2d(integral(snr, x, p), -R, R, h, g) ;
 % ---------------------
 % ----- Functions -----
 % ---------------------
