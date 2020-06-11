@@ -1,6 +1,6 @@
 function P = maxwell_boltzmanProbability(M, no_amp, amp_dis, abs_amp)
     % I don't know what is this exaclty :))
-    a_vectorized = linspace(0.1, 1.57, 9);
+    a_vectorized = linspace(0.42, 1.57, 9);
     
     p_opt = zeros(M,length(a_vectorized));
     

@@ -4,7 +4,7 @@ clc, clear all
 M = 64;
 
 % vector of desired SNRs
-SNRdB_vec = 0:1:20;
+SNRdB_vec = 0:.1:20;
 
 % creating the QAM constellations
 x = qammod(0:M-1,M,'gray');
@@ -23,62 +23,70 @@ x = x(idx);
 x = x / sqrt(1/M*norm(x, 'fro')^2);
 
 % creating the figure
-figure,
-xlabel('SNR [dB]')
-ylabel('C [bpcu]')
+% figure,
+% xlabel('SNR [dB]')
+% ylabel('C [bpcu]')
+% 
+% %% creating the graph for equiprobable case
+% pXA = (1/M)*ones(M,1);
+% C = zeros(size(SNRdB_vec));
+% i = 0;
+% for SNRdB = SNRdB_vec
+%         i = i+1;
+%         C(i) = QAMCapacity(SNRdB,x, pXA');
+% end
+% 
+% plot(SNRdB_vec, C, 'Linewidth', 2)
+% 
+% %% unrestricted capacity
+% i = 0;
+% for SNRdB = SNRdB_vec
+%     i = i+1;
+%     C(i) = shannon(SNRdB);
+% end
+% hold on, grid on
+% plot(SNRdB_vec, C, 'Linewidth', 7)
+% legend('equiprobable 64 QAM', 'unrestricted capacity')
+% %% maxWell boltzman
+% p_maxwell = maxwell_boltzmanProbability(M,no_of_amplitudes,amplitude_distance,sorted_amplitudes);
+% for j = 1:1:size(p_maxwell,2)
+%     i = 0;
+%     for SNRdB = SNRdB_vec
+%         i = i+1;
+%         C(i) = QAMCapacity(SNRdB,x, p_maxwell(:,j)');
+%     end
+%     plot(SNRdB_vec, C, 'Linewidth', 2)
+% end
 
-%% creating the graph for equiprobable case
-pXA = (1/M)*ones(M,1);
-C = zeros(size(SNRdB_vec));
-i = 0;
-for SNRdB = SNRdB_vec
-        i = i+1;
-        C(i) = QAMCapacity(SNRdB,x, pXA');
-end
-
-plot(SNRdB_vec, C, 'Linewidth', 2)
-
-%% unrestricted capacity
-i = 0;
-for SNRdB = SNRdB_vec
-    i = i+1;
-    C(i) = shannon(SNRdB);
-end
-hold on, grid on
-plot(SNRdB_vec, C, 'Linewidth', 7)
-legend('equiprobable 64 QAM', 'unrestricted capacity')
-%% maxWell boltzman
-p_maxwell = maxwell_boltzmanProbability(M,no_of_amplitudes,amplitude_distance,absolute_values_of_amplitudes);
-for j = 1:1:size(p_maxwell,2)
-    i = 0;
-    for SNRdB = SNRdB_vec
-        i = i+1;
-        C(i) = QAMCapacity(SNRdB,x, p_maxwell(:,j)');
-    end
-    plot(SNRdB_vec, C, 'Linewidth', 2)
-end
-
-%% second approach
-
-% n = size(no_of_amplitudes,2);
-% p_second = zeros(M,1);
-% for i = 4:1:n
-%     p_second_distribution = Probability_Distribution(i);
-%     p_second_multichoose = nmultichoosek(p_second_distribution,i);
-%     prob_space = find(sum(p_second_multichoose,2)==1);
-%     ps = zeros(n);
-%     t = 0;
-%     C = zeros(size(SNRdB_vec,2));
-%     j = 0;
-%     for index = prob_space'
-%         t = t + 1;
-%         ps(t,:) = [sort(p_second_multichoose(index,:), 'descend'),zeros(1, n-i)];
-%         p_second = repelem(ps(t,:)/no_of_amplitudes(t),no_of_amplitudes)';
+%% CCDM
+n = 64;
+% choosing probabilities according to the number of different amplitudes
+s = size(no_of_amplitudes,2);
+% probability distri bution for each different set
+p_second = zeros(n);
+for i = s:10:n
+%     creating the probabilities space
+%     for example if n is equal to 2 the space is {0,0.5,1}
+    p_second_distribution = Probability_Distribution(i);
+%     creating all the prossible permutation with number of given
+%     amplitudes, the repeatition is allowed.
+    p_second_multichoose = nmultichoosek(p_second_distribution,s);
+%     between all the possible permutations we choose the indexes of the
+%     ones that the sum's equal to 1
+    prob_space = find(sum(p_second_multichoose,2)==1);
+    ps = zeros(s);
+    t = 0;
+    C = zeros(size(SNRdB_vec,2));
+    j = 0;
+    for index = prob_space'
+        t = t + 1;
+        ps(t,:) = sort(p_second_multichoose(index,:), 'descend');
+        p_second(t,:) = repelem(ps(t,:)/no_of_amplitudes(t),no_of_amplitudes)';
 %         for SNRdB = SNRdB_vec
 %             j = j+1;
 %             C(j) = QAMCapacity(SNRdB,x, p_second');
 %         end
-%     end
+    end
 %     c_plot = min(C);
 %       plot(SNRdB_vec, c_plot, 'Linewidth', 2)
 % 
@@ -86,7 +94,7 @@ end
 %     str = 'optimaly shaped';
 %     out{i} = sprintf('%s_%d',str,i);
 %     legend(out)
-% end
+end
 
 
 %% first approach

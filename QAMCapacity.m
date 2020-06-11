@@ -49,14 +49,17 @@ function c = QAMCapacity( SNR, x, p )
 % ----- Initialization -----
 % --------------------------
 if( length(x) ~= length(p) )
-    error('x and p should have the same length!') ;
-end
-if( abs(sum(p)-1)>10^(-6) )
-    error('p is not a pdf!') ;
-end
-if(abs(x).^2*p' > 1)
-    error('The channel input does not verify E[X^2]<1!') ;
-end
+    disp('x and p should have the same length!') ;
+    c = NaN;
+elseif( abs(sum(p)-1)>10^(-6) )
+    disp('p is not a pdf!') ;
+    c = NaN;
+
+elseif(abs(x).^2*p' > 1)
+    disp('The channel input does not verify E[X^2]<1!') ;
+    c = NaN;
+
+else
 snr = 10^(SNR/10) ;
 % --------------------
 % ----- Capacity -----
@@ -66,7 +69,8 @@ h = @(x) sqrt(R^2-x.^2);
 g = @(x) -sqrt(R^2-x.^2);
 % variance is 1/2 
 % entropy of the noise 
-c = -log2(pi*exp(1)) - quad2d(integral(snr, x, p), -20, 20, -20, 20) ;
+c = -log2(pi*exp(1)) - quad2d(integral(snr, x, p), -R, R, g, h) ;
+end
 % ---------------------
 % ----- Functions -----
 % ---------------------
