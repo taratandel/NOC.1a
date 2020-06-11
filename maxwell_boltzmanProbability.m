@@ -16,7 +16,7 @@ function P = maxwell_boltzmanProbability(M, no_amp, amp_dis, abs_amp)
     %       offset is b in the graph
             offset = 0;
             for i = 1:1:length(no_of_amplitudes)
-                offset = offset + no_of_amplitudes(i)*test(amplitude_distance(i), a);
+                offset = offset + no_of_amplitudes(i)*max_bol_formula(amplitude_distance(i), a);
             end
             offset = 1/offset;
 
