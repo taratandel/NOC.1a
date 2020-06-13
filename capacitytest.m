@@ -23,48 +23,48 @@ x = x(idx);
 x = x / sqrt(1/M*norm(x, 'fro')^2);
 
 % creating the figure
-% figure,
-% xlabel('SNR [dB]')
-% ylabel('C [bpcu]')
-% 
-% %% creating the graph for equiprobable case
-% pXA = (1/M)*ones(M,1);
-% C = zeros(size(SNRdB_vec));
-% i = 0;
-% for SNRdB = SNRdB_vec
-%         i = i+1;
-%         C(i) = QAMCapacity(SNRdB,x, pXA');
-% end
-% 
-% plot(SNRdB_vec, C, 'Linewidth', 2)
-% 
-% %% unrestricted capacity
-% i = 0;
-% for SNRdB = SNRdB_vec
-%     i = i+1;
-%     C(i) = shannon(SNRdB);
-% end
-% hold on, grid on
-% plot(SNRdB_vec, C, 'Linewidth', 7)
-% legend('equiprobable 64 QAM', 'unrestricted capacity')
-% %% maxWell boltzman
-% p_maxwell = maxwell_boltzmanProbability(M,no_of_amplitudes,amplitude_distance,sorted_amplitudes);
-% for j = 1:1:size(p_maxwell,2)
-%     i = 0;
-%     for SNRdB = SNRdB_vec
-%         i = i+1;
-%         C(i) = QAMCapacity(SNRdB,x, p_maxwell(:,j)');
-%     end
-%     plot(SNRdB_vec, C, 'Linewidth', 2)
-% end
+figure,
+xlabel('SNR [dB]')
+ylabel('C [bpcu]')
+
+%% creating the graph for equiprobable case
+pXA = (1/M)*ones(M,1);
+C = zeros(size(SNRdB_vec));
+i = 0;
+for SNRdB = SNRdB_vec
+        i = i+1;
+        C(i) = QAMCapacity(SNRdB,x, pXA');
+end
+
+plot(SNRdB_vec, C, 'Linewidth', 2)
+
+%% unrestricted capacity
+i = 0;
+for SNRdB = SNRdB_vec
+    i = i+1;
+    C(i) = shannon(SNRdB);
+end
+hold on, grid on
+plot(SNRdB_vec, C, 'Linewidth', 7)
+legend('equiprobable 64 QAM', 'unrestricted capacity')
+%% maxWell boltzman
+p_maxwell = maxwell_boltzmanProbability(M,no_of_amplitudes,amplitude_distance,sorted_amplitudes);
+for j = 1:1:size(p_maxwell,2)
+    i = 0;
+    for SNRdB = SNRdB_vec
+        i = i+1;
+        C(i) = QAMCapacity(SNRdB,x, p_maxwell(:,j)');
+    end
+    plot(SNRdB_vec, C, 'Linewidth', 2)
+end
 
 %% CCDM
 n = 64;
 % choosing probabilities according to the number of different amplitudes
-s = size(no_of_amplitudes,2);
+s = size(no_of_amplitudes,2) + 1;
 % probability distri bution for each different set
 p_second = zeros(n);
-for i = s:10:n
+for i = 30:10:n
 %     creating the probabilities space
 %     for example if n is equal to 2 the space is {0,0.5,1}
     p_second_distribution = Probability_Distribution(i);
@@ -81,7 +81,7 @@ for i = s:10:n
     for index = prob_space'
         t = t + 1;
         ps(t,:) = sort(p_second_multichoose(index,:), 'descend');
-        p_second(t,:) = repelem(ps(t,:)/no_of_amplitudes(t),no_of_amplitudes)';
+%         p_second(t,:) = repelem(ps(t,:)/no_of_amplitudes(t),no_of_amplitudes)';
 %         for SNRdB = SNRdB_vec
 %             j = j+1;
 %             C(j) = QAMCapacity(SNRdB,x, p_second');
