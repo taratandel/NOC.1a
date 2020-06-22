@@ -81,7 +81,7 @@ end
 
 
 %% CCDM
-n = 30;
+n = 500;
 % choosing probabilities according to the number of different amplitudes
 s = size(no_of_amplitudes,2);
 % probability distri bution for each different set
@@ -92,7 +92,7 @@ for i = s+1:10:n
     p_second_distribution = Probability_Distribution(i);
 %     creating all the prossible permutation with number of given
 %     amplitudes, the repeatition is allowed.
-    p_second_multichoose = nmultichoosek(int8(p_second_distribution),s);
+    p_second_multichoose = nmultichoosek(p_second_distribution,s);
 %     between all the possible permutations we choose the indexes of the
 %     ones that the sum's equal to 1
     prob_space = find(sum(p_second_multichoose,2)==1);
