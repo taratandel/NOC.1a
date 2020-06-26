@@ -61,10 +61,12 @@ elseif(abs(x).^2*p' > 1)
 
 else
 snr = 10^(SNR/10) ;
+correcting_factor = sqrt(snr/mean(abs(x).^2*p'));
+
 % --------------------
 % ----- Capacity -----
 % --------------------
-R = norm(max(sqrt(snr)*x)) + 5                                  ;
+R = norm(max(correcting_factor*x)) + 5                                  ;
 h = @(x) sqrt(R^2-x.^2);
 g = @(x) -sqrt(R^2-x.^2);
 % variance is 1/2 
@@ -78,7 +80,7 @@ end
     function z = pdf_channel_output(y1, y2, snr, x, p)
         z = 0 ;
         for k=1:length(x)
-            z = z + p(k) .* 1/pi.*exp( -(y1-sqrt(snr).*real(x(k))).^2 -(y2-sqrt(snr).*imag(x(k))).^2 ) ;
+            z = z + p(k) .* 1/pi.*exp( -(y1-correcting_factor.*real(x(k))).^2 -(y2-correcting_factor.*imag(x(k))).^2 ) ;
         end
     end
     function z = integral(snr, x, p)
