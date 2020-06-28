@@ -61,7 +61,8 @@ elseif(abs(x).^2*p' > 1)
 
 else
 snr = 10^(SNR/10) ;
-correcting_factor = sqrt(snr/mean(abs(x).^2*p'));
+expected = expected_value(x,p);
+correcting_factor = sqrt(snr/expected);
 
 % --------------------
 % ----- Capacity -----
@@ -72,7 +73,7 @@ g = @(x) -sqrt(R^2-x.^2);
 % variance is 1/2 
 % entropy of the noise 
 %because x is normalaized y will vary between SNR + max{x} which is 21 here
-c = -log2(pi*exp(1)) - quad2d(integral(snr, x, p), -R, R, g, h) ;
+c = -log2(pi*exp(1)) - quad2d(integral(snr, x, p), -20, 20, -20, 20) ;
 end
 % ---------------------
 % ----- Functions -----
@@ -80,7 +81,7 @@ end
     function z = pdf_channel_output(y1, y2, snr, x, p)
         z = 0 ;
         for k=1:length(x)
-            z = z + p(k) .* 1/pi.*exp( -(y1-correcting_factor.*real(x(k))).^2 -(y2-correcting_factor.*imag(x(k))).^2 ) ;
+            z = z + p(k) .* 1/pi.*exp( -(y1-correcting_factor*real(x(k))).^2 -(y2-correcting_factor*imag(x(k))).^2 ) ;
         end
     end
     function z = integral(snr, x, p)

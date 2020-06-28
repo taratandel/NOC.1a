@@ -11,13 +11,13 @@ function output = convert9to64(prob9, n_of_amp)
 % the second input n_of_amp is also a size 9 vector, that
 % specifies how many points there are in the constellation
 % for each amplitude, its elements sum to 64
-prob64 = zeros(1,64) %we first initialize the 64 sized vector
-cnt = 1 %this is a temporary variable to count the element of prob64 to be rewritten in the for loop
-prob9 = prob9./n_of_amp %we divide each probability for the number of points that have that probability
+prob64 = zeros(1,64); %we first initialize the 64 sized vector
+cnt = 1; %this is a temporary variable to count the element of prob64 to be rewritten in the for loop
+prob9 = prob9./n_of_amp; %we divide each probability for the number of points that have that probability
 for i = 1:size(n_of_amp')
     for j = 1:n_of_amp(i)
-        prob64(cnt) = prob9(i)
-        cnt = cnt+1
+        prob64(cnt) = prob9(i);
+        cnt = cnt+1;
     end
 end
-output = prob64
+output = prob64;
