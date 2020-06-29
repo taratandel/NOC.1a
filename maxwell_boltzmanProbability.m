@@ -1,7 +1,7 @@
 function P = maxwell_boltzmanProbability(M, no_amp, amp_dis, abs_amp)
     
     % how distributed is maxwell boltzman
-    a_vectorized = linspace(0.4, 2.57, 9);
+    a_vectorized = linspace(0.4, 4.57, 9);
     
     p_opt = zeros(M,length(a_vectorized));
     
