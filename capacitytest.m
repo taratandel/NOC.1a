@@ -89,6 +89,6 @@ for n=30:50:130
         C(i) = QAMCapacity(SNRdB,x, quant');
     end
     plot(SNRdB_vec, C, 'Linewidth', 2)
-    out{end + 1} = sprintf('quantization step = %d',n);
+    out{end + 1} = sprintf('quantization step = %d',1/n);
 end
 legend(out)
