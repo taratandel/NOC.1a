@@ -9,7 +9,20 @@ function c = QAMCapacity( SNR, x, p )
 % The code works in dimension 1 and 2. 
 %
 % The channel model is:
-% Y = sqrt(snr)X+N
+% The model is Y = a X + N, where N ~ CN(0, Pn)
+% You set SNR = Ps / Pn, where
+% Pn is the variance of the additive noise, and
+% Ps = a^2 E[ |X|^2 ].
+%  
+% The term E[ |X|^2 ] will depend on the probabilities of the constellation symbols, while the constant a does not.
+%  
+% Once SNR and Pn are fixed,
+% Ps = SNR * Pn
+% and
+% a = sqrt(Ps / E[ |X|^2 ])
+%  
+% The constant a is the scaling factor of the constellation.
+%  
 % where E[X^2]<1 and N ~ N(0,1). Here snr is in linear scale. The capacity 
 % is equal to I(X;Y) where I is the mutual information. The mutual
 % information computation gives (H is the entropy function):
